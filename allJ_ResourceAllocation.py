@@ -128,18 +128,6 @@ current_known_number = STARTING_DAYS
 lagged_dataset_X = lagged_dataset_X[15:330, :]
 lagged_dataset_Y = lagged_dataset_Y[15:330, :]
 
-#print(lagged_dataset_Y.shape[0])
-#print(lagged_dataset_Y[:current_known_number].shape[0])
-#print(lagged_dataset_Y[current_known_number:].shape[0])
-#exit()
-
-#temp = lagged_dataset_Y[:, 0]*patient_std + patient_mean
-#pl.plot(range(lagged_dataset_Y.shape[0]), temp, 'b')
-#pl.xlabel('Day Index')
-#pl.ylabel('Patient Count')
-#pl.show()
-#exit()
-
 while current_known_number < lagged_dataset_X.shape[0]:
     print("Currently considering as known days up to: ", current_known_number)
     # Set the current "known days", create relevant datasets
@@ -166,11 +154,6 @@ while current_known_number < lagged_dataset_X.shape[0]:
     # using multi-task approach:
 
     K_RBF = GPy.kern.RBF(X_train_all.shape[1])
-    K_poly_bi = GPy.kern.Poly(1, order=2, bias=1)
-    K_poly_high = GPy.kern.Poly(1, order=3)
-
-
-    # Different Kernel - Lag number combinations tried:
 
     K = K_RBF
 
@@ -295,23 +278,14 @@ lc_bound = np.asarray(all_predictions) - 1.96 * (np.sqrt(np.asarray(all_vs)))
 
 ### Prediction Inspection plot
 
-pl.plot(range(len(all_predictions)), all_predictions, 'r')
-#pl.plot(range(len(all_predictions)), uc_bound, 'k')
-#pl.plot(range(len(all_predictions)), lc_bound, 'k')
+#pl.plot(range(len(all_predictions)), all_predictions, 'r')
 # Invert normalisation for plotting:
-patients_per_day = (lagged_dataset_Y[:, 0] * patient_std) + patient_mean
-pl.plot(range(len(all_predictions)), patients_per_day[STARTING_DAYS+1:], 'b')
-pl.xlabel('Day Index')
-pl.ylabel('Patient Count')
-pl.fill_between(range(len(all_predictions)), lc_bound, uc_bound, color='0.75')
-pl.show()
-
-
-print("Beta Correlation Matrix from Multi-Task model:")
-Beta = mean_Beta / len(all_rmses) # len(all_rmses) is a convenient way to get the number of rolling windows
-print(Beta)
-plt.imshow(Beta, cmap='autumn')
-plt.show()
+#patients_per_day = (lagged_dataset_Y[:, 0] * patient_std) + patient_mean
+#pl.plot(range(len(all_predictions)), patients_per_day[STARTING_DAYS+1:], 'b')
+#pl.xlabel('Day Index')
+#pl.ylabel('Patient Count')
+#pl.fill_between(range(len(all_predictions)), lc_bound, uc_bound, color='0.75')
+#pl.show()
 
 rho, _ = spearmanr(lagged_dataset_Y[:, 0], lagged_dataset_Y[:, 1])
 print("Spearman Correlation coefficient, Main->Extra:", rho)

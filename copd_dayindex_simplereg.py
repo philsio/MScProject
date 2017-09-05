@@ -13,7 +13,6 @@ print('Done.')
 print('Preprocessing Data to form usable for the approach decided...')
 total_patients = patient_data.shape[0]
 
-#total_pollutant_measurements = pollutant_data.shape[0]
 total_pollutant_measurements = 413
 
 start_date = pollutant_data.iat[0, 0]
@@ -21,7 +20,6 @@ end_date = pollutant_data.iat[-1, 0]
 
 # Define a list of the applicable dates, so we can then match dates to indices
 dates = pd.date_range(start='2014-12-1', end='2016-1-31', freq='D')
-#dates = pd.date_range(start=start_date, end=end_date, freq='D')
 patient_data = (patient_data[patient_data['MEDICAL_ORG_CODE'] == '45090340X'])
 current_total_patients = patient_data.shape[0]
 total_dates = dates.shape[0]
@@ -187,16 +185,8 @@ while current_known_number < all_measurements.shape[0]:
     # using multi-task approach:
 
     K_RBF = GPy.kern.RBF(1)
-    K_perexp = GPy.kern.PeriodicExponential(input_dim=1)
     K_Matern = GPy.kern.PeriodicMatern32(1)
-    K_poly_bi = GPy.kern.Poly(1, order=2, bias=1)
-    K_poly_high = GPy.kern.Poly(1, order=3)
 
-    #K = K_perexp + K_poly_bi -> RMSE 27.10
-    #K = K_perexp + K_poly_high # -> RMSE 26.87 for order 3
-    #K = K_Matern + K_poly_bi -> 26.05 # Not very informative plot
-    #K = K_Matern + K_poly_high -> 26.69 # Not very informative plot (order 5)
-    #K = K_perexp
     K = K_Matern + K_RBF
 
     model = GPy.models.GPRegression(X=X_days, Y=Task_main,kernel=K)
@@ -252,22 +242,16 @@ for sample in range(len(all_predictions)):
         correct_hits.append(0)
 print("Percentage of values within Predicted Confidence Interval:", sum(correct_hits)/len(correct_hits))
 
-print(len(all_predictions))
 ### Prediction Inspection plot
-pl.plot(range(len(all_predictions)), all_predictions, 'r')
-pl.plot(range(len(all_predictions)), patients_per_day[STARTING_DAYS+1:], 'b')
-pl.fill_between(range(len(all_predictions)), lc_bound[:, 0], uc_bound[:, 0], color='0.75')
-pl.xlabel('Day Index')
-pl.ylabel('Patient Count')
-pl.xlabel('Day Index', fontsize=18)
-pl.ylabel('Patient Count', fontsize=18)
-pl.xticks(np.arange(0, len(all_predictions), 5))
-pl.tick_params(axis='both', which='major', labelsize=14)
-pl.tick_params(axis='both', which='minor', labelsize=10)
-pl.show()
+#pl.plot(range(len(all_predictions)), all_predictions, 'r')
+#pl.plot(range(len(all_predictions)), patients_per_day[STARTING_DAYS+1:], 'b')
+#pl.fill_between(range(len(all_predictions)), lc_bound[:, 0], uc_bound[:, 0], color='0.75')
+#pl.xlabel('Day Index')
+#pl.ylabel('Patient Count')
+#pl.xlabel('Day Index', fontsize=18)
+#pl.ylabel('Patient Count', fontsize=18)
+#pl.xticks(np.arange(0, len(all_predictions), 5))
+#pl.tick_params(axis='both', which='major', labelsize=14)
+#pl.tick_params(axis='both', which='minor', labelsize=10)
+#pl.show()
 
-#for i in range(0, len(all_Betas)):
-#    Beta = all_Betas[i]
-#    plt.imshow(Beta, cmap='autumn')
-#    plt.show()
-exit()

@@ -259,17 +259,17 @@ lc_bound = np.asarray(all_predictions) - 1.96 * (np.sqrt(np.asarray(all_vs)))
 
 ### Prediction Inspection plot
 
-pl.plot(range(len(all_predictions)), all_predictions, 'r')
+#pl.plot(range(len(all_predictions)), all_predictions, 'r')
 # Invert normalisation for plotting:
-patients_per_day = (lagged_dataset_Y[:, 0] * patient_std) + patient_mean
-pl.plot(range(len(all_predictions)), patients_per_day[STARTING_DAYS+1:], 'b')
-pl.xlabel('Day Index')
-pl.ylabel('Patient Count')
-pl.xlabel('Day Index', fontsize=25)
-pl.ylabel('Patient Count', fontsize=25)
-pl.xticks(np.arange(0, len(all_predictions), 5))
-pl.tick_params(axis='both', which='major', labelsize=23)
-pl.tick_params(axis='both', which='minor', labelsize=20)
-pl.fill_between(range(len(all_predictions)), lc_bound, uc_bound, color='0.75')
-pl.show()
+#patients_per_day = (lagged_dataset_Y[:, 0] * patient_std) + patient_mean
+#pl.plot(range(len(all_predictions)), patients_per_day[STARTING_DAYS+1:], 'b')
+#pl.xlabel('Day Index')
+#pl.ylabel('Patient Count')
+#pl.xlabel('Day Index', fontsize=25)
+#pl.ylabel('Patient Count', fontsize=25)
+#pl.xticks(np.arange(0, len(all_predictions), 5))
+#pl.tick_params(axis='both', which='major', labelsize=23)
+#pl.tick_params(axis='both', which='minor', labelsize=20)
+#pl.fill_between(range(len(all_predictions)), lc_bound, uc_bound, color='0.75')
+#pl.show()
 
